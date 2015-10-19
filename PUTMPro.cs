@@ -350,9 +350,16 @@ public class PUTMPro : PUGameObject {
 		t.extraPadding = textGUI.extraPadding;
 		t.enableWordWrapping = textGUI.enableWordWrapping;
 		t.OverflowMode = TextOverflowModes.Overflow;
-		t.text = text;
 		t.fontSize = textGUI.fontSize;
 		t.richText = textGUI.richText;
+		t.fontStyle = textGUI.fontStyle;
+		t.alignment = textGUI.alignment;
+		t.outlineWidth = textGUI.outlineWidth;
+		t.characterSpacing = textGUI.characterSpacing;
+		t.lineSpacing = textGUI.lineSpacing;
+		t.paragraphSpacing = textGUI.paragraphSpacing;
+		t.text = text;
+
 		t.ForceMeshUpdate ();
 		Vector2 size = new Vector2(((t.preferredWidth+textGUI.fontSize) < maxWidth ? (t.preferredWidth+textGUI.fontSize) : maxWidth), t.preferredHeight);
 		GameObject.Destroy (obj);
