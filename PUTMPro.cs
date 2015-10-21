@@ -306,7 +306,7 @@ public class PUTMPro : PUGameObject {
 
 			LeanTween.delayedCall (0, () => {
 				if(textGUI != null){
-					textGUI.CallOnEnable();
+					textGUI.RegisterGraphicForCanvas();
 				}
 			});
 		}
