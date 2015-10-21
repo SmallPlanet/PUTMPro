@@ -299,6 +299,12 @@ public class PUTMPro : PUGameObject {
 			if (gameObject.GetComponent<Graphic> () == null) {
 				gameObject.AddComponent<InvisibleHitGraphic> ();
 			}
+
+			LeanTween.delayedCall (0, () => {
+				if(textGUI != null){
+					textGUI.CallOnEnable();
+				}
+			});
 		}
 	}
 
