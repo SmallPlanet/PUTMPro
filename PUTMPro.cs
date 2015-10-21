@@ -142,10 +142,14 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 	}
 
 	public bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera) {
+		if (gameObject.activeSelf == false)
+			return false;
 		return TestForHit(screenPoint, eventCamera, null);
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
+		if (gameObject.activeSelf == false)
+			return;
 		TestForHit (Input.mousePosition, eventData.pressEventCamera, (linkText, clickedLinkID) => {
 			if(entity != null){
 				entity.LinkClicked (linkText, clickedLinkID);
