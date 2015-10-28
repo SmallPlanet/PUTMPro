@@ -174,6 +174,8 @@ public class PUTMPro : PUGameObject {
 
 	static Dictionary<string,TextMeshProFont> fontAssets = new Dictionary<string, TextMeshProFont>();
 
+	public static string DefaultFont = "Fonts/ArialRegular";
+
 	public TextMeshProUGUI textGUI;
 	public TextMeshPro text;
 
@@ -189,7 +191,7 @@ public class PUTMPro : PUGameObject {
 	public int maxVisibleLines = 0;
 	public int maxSize = 200;
 	public int minSize = 0;
-	public string font = "Fonts/ArialRegular";
+	public string font;
 	public string fontStyle;
 	public int fontSize = 32;
 	public Color fontColor = Color.white;
@@ -231,6 +233,8 @@ public class PUTMPro : PUGameObject {
 		base.gaxb_final(reader, _parent, args);
 
 		string attrib;
+
+		font = DefaultFont;
 
 		if(reader != null){
 			attrib = reader.GetAttribute ("font");
