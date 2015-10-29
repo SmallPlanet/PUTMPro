@@ -234,7 +234,9 @@ public class PUTMPro : PUGameObject {
 
 		string attrib;
 
-		font = DefaultFont;
+		if (font == null) {
+			font = DefaultFont;
+		}
 
 		if(reader != null){
 			attrib = reader.GetAttribute ("font");
