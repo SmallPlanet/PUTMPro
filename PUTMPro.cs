@@ -36,6 +36,9 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 
 		string value = null;
 
+		if (entity == null) {
+			return false;
+		}
 		if(entity.text != null)
 			value = entity.text.text;
 		if(entity.textGUI != null)
