@@ -58,7 +58,7 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 			textInfo = entity.textGUI.textInfo;
 
 		Vector3[] vertices = textInfo.meshInfo.vertices;
-		UIVertex[] uiVertices = textInfo.meshInfo.uiVertices;
+		UIVertex[] uiVertices = null; //textInfo.meshInfo.uiVertices;
 
 		if (vertices != null || uiVertices != null) {
 			for (int i = 0; i < textInfo.wordCount; i++) {
@@ -313,11 +313,12 @@ public class PUTMPro : PUGameObject {
 				gameObject.AddComponent<InvisibleHitGraphic> ();
 			}
 
-			LeanTween.delayedCall (0, () => {
-				if(textGUI != null){
-					textGUI.RegisterGraphicForCanvas();
-				}
-			});
+			// TODO: This hack was necessary for getting clicking to work on TMPro...
+			//LeanTween.delayedCall (0, () => {
+			//	if(textGUI != null){
+			//		textGUI.RegisterGraphicForCanvas();
+			//	}
+			//});
 		}
 	}
 
