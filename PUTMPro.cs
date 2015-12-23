@@ -57,37 +57,39 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 		if(entity.textGUI != null)
 			textInfo = entity.textGUI.textInfo;
 
-		Vector3[] vertices = textInfo.meshInfo.vertices;
-		UIVertex[] uiVertices = null; //textInfo.meshInfo.uiVertices;
+		foreach (TMP_MeshInfo meshInfo in textInfo.meshInfo) {
+			Vector3[] vertices = meshInfo.vertices;
+			UIVertex[] uiVertices = null; //textInfo.meshInfo.uiVertices;
 
-		if (vertices != null || uiVertices != null) {
-			for (int i = 0; i < textInfo.wordCount; i++) {
+			if (vertices != null || uiVertices != null) {
+				for (int i = 0; i < textInfo.wordCount; i++) {
 
-				TMP_WordInfo wordInfo = textInfo.wordInfo [i];
-				int charCount = wordInfo.characterCount;
+					TMP_WordInfo wordInfo = textInfo.wordInfo [i];
+					int charCount = wordInfo.characterCount;
 
-				TMP_CharacterInfo startCharInfo = textInfo.characterInfo [wordInfo.firstCharacterIndex];
-				for (int j = 0; j < charCount; j++) {
+					TMP_CharacterInfo startCharInfo = textInfo.characterInfo [wordInfo.firstCharacterIndex];
+					for (int j = 0; j < charCount; j++) {
 				
-					TMP_CharacterInfo charInfo = textInfo.characterInfo [wordInfo.firstCharacterIndex + j];
-					int vertIndex = startCharInfo.vertexIndex;
-					int index_X4 = j * 4;
+						TMP_CharacterInfo charInfo = textInfo.characterInfo [wordInfo.firstCharacterIndex + j];
+						int vertIndex = startCharInfo.vertexIndex;
+						int index_X4 = j * 4;
 
-					Vector3 a = (vertices != null ? vertices [vertIndex + 0 + index_X4] : uiVertices [vertIndex + 0 + index_X4].position);
-					Vector3 b = (vertices != null ? vertices [vertIndex + 1 + index_X4] : uiVertices [vertIndex + 1 + index_X4].position);
-					Vector3 c = (vertices != null ? vertices [vertIndex + 2 + index_X4] : uiVertices [vertIndex + 2 + index_X4].position);
-					Vector3 d = (vertices != null ? vertices [vertIndex + 3 + index_X4] : uiVertices [vertIndex + 3 + index_X4].position);
+						Vector3 a = (vertices != null ? vertices [vertIndex + 0 + index_X4] : uiVertices [vertIndex + 0 + index_X4].position);
+						Vector3 b = (vertices != null ? vertices [vertIndex + 1 + index_X4] : uiVertices [vertIndex + 1 + index_X4].position);
+						Vector3 c = (vertices != null ? vertices [vertIndex + 2 + index_X4] : uiVertices [vertIndex + 2 + index_X4].position);
+						Vector3 d = (vertices != null ? vertices [vertIndex + 3 + index_X4] : uiVertices [vertIndex + 3 + index_X4].position);
 
-					a = (a + b + c + d) / 4;
+						a = (a + b + c + d) / 4;
 
-					if (charInfo.character == '\x0b') {
-						linkID++;
-					}
+						if (charInfo.character == '\x0b') {
+							linkID++;
+						}
 					
-					float distance = Vector2.Distance (touchPos, a);
-					if (distance < minDistance) {
-						minDistance = distance;
-						minChar = charInfo.index;
+						float distance = Vector2.Distance (touchPos, a);
+						if (distance < minDistance) {
+							minDistance = distance;
+							minChar = charInfo.index;
+						}
 					}
 				}
 			}
@@ -175,7 +177,7 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 
 public class PUTMPro : PUGameObject {
 
-	static Dictionary<string,TextMeshProFont> fontAssets = new Dictionary<string, TextMeshProFont>();
+	static Dictionary<string,TMP_FontAsset> fontAssets = new Dictionary<string, TMP_FontAsset>();
 
 	public static string DefaultFont = "Fonts/ArialRegular";
 
@@ -221,11 +223,11 @@ public class PUTMPro : PUGameObject {
 		}
 	}
 
-	static public TextMeshProFont GetFont(string path) {
+	static public TMP_FontAsset GetFont(string path) {
 		if (fontAssets.ContainsKey (path)) {
 			return fontAssets [path];
 		}
-		TextMeshProFont font = Resources.Load<TextMeshProFont> (path);
+		TMP_FontAsset font = Resources.Load<TMP_FontAsset> (path);
 		if (font != null) {
 			fontAssets [path] = font;
 		}
