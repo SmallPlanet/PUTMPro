@@ -34,7 +34,7 @@ public class PUTMProFast : PUTMPro {
 		TextContainer container = childObject.AddComponent<TextContainer> ();
 		container.width = rectTransform.rect.width;
 		container.height = rectTransform.rect.height;
-		container.anchorPosition = TextContainerAnchors.BottomLeft;
+		container.anchorPosition = TextContainerAnchors.Middle;
 
 		text = childObject.AddComponent<TextMeshPro> ();
 		text.font = GetFont(font);
