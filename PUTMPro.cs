@@ -227,7 +227,8 @@ public class PUTMPro : PUGameObject {
 		if (fontAssets.ContainsKey (path)) {
 			return fontAssets [path];
 		}
-		TMP_FontAsset font = Resources.Load<TMP_FontAsset> (path);
+			
+		TMP_FontAsset font = PlanetUnityOverride.LoadResource(typeof(TMP_FontAsset), path) as TMP_FontAsset;
 		if (font != null) {
 			fontAssets [path] = font;
 		}
