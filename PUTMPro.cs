@@ -319,7 +319,7 @@ public class PUTMPro : PUGameObject {
 			// TODO: This hack was necessary for getting clicking to work on TMPro...
 			LeanTween.delayedCall (0, () => {
 				if(textGUI != null){
-					textGUI.RegisterGraphicForCanvas();
+					//textGUI.RegisterGraphicForCanvas();
 				}
 			});
 		}
