@@ -254,11 +254,7 @@ public class PUTMPro : PUGameObject {
 
 			attrib = reader.GetAttribute ("fontSize");
 			if (attrib != null) {
-				string testStr = PlanetUnityOverride.processString (_parent, attrib);
-				float testF = float.Parse (testStr);
-				int testI1 = (int)testF;
-				int testI2 = int.Parse (testStr);
-				fontSize = testI2;//int.Parse ();
+				fontSize = (int)(float.Parse (PlanetUnityOverride.processString (_parent, attrib)));
 			}
 
 			attrib = reader.GetAttribute ("fontStyle");
@@ -273,7 +269,7 @@ public class PUTMPro : PUGameObject {
 
 			attrib = reader.GetAttribute ("maxSize");
 			if (attrib != null) {
-				maxSize = int.Parse (PlanetUnityOverride.processString(_parent, attrib));
+				maxSize = (int)(float.Parse (PlanetUnityOverride.processString(_parent, attrib)));
 			}
 
 			attrib = reader.GetAttribute ("enableWordWrapping");
@@ -288,7 +284,7 @@ public class PUTMPro : PUGameObject {
 
 			attrib = reader.GetAttribute ("minSize");
 			if (attrib != null) {
-				minSize = int.Parse (PlanetUnityOverride.processString(_parent, attrib));
+				minSize = (int)(float.Parse (PlanetUnityOverride.processString(_parent, attrib)));
 			}
 
 			attrib = reader.GetAttribute ("alignment");
