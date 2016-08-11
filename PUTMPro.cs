@@ -199,8 +199,10 @@ public class PUTMPro : PUGameObject {
 	public string font;
 	public string fontStyle;
 	public int fontSize = 32;
+	public int lineSpacing = 0;
 	public Color fontColor = Color.white;
 	public TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft;
+	public TextOverflowModes overflowMode = TextOverflowModes.Truncate;
 
 	public PUTMPro() {
 
@@ -252,7 +254,11 @@ public class PUTMPro : PUGameObject {
 
 			attrib = reader.GetAttribute ("fontSize");
 			if (attrib != null) {
-				fontSize = int.Parse (attrib);
+				string testStr = PlanetUnityOverride.processString (_parent, attrib);
+				float testF = float.Parse (testStr);
+				int testI1 = (int)testF;
+				int testI2 = int.Parse (testStr);
+				fontSize = testI2;//int.Parse ();
 			}
 
 			attrib = reader.GetAttribute ("fontStyle");
@@ -262,12 +268,12 @@ public class PUTMPro : PUGameObject {
 
 			attrib = reader.GetAttribute ("sizeToFit");
 			if (attrib != null) {
-				sizeToFit = bool.Parse (attrib);
+				sizeToFit = bool.Parse (PlanetUnityOverride.processString(_parent, attrib));
 			}
 
 			attrib = reader.GetAttribute ("maxSize");
 			if (attrib != null) {
-				maxSize = int.Parse (attrib);
+				maxSize = int.Parse (PlanetUnityOverride.processString(_parent, attrib));
 			}
 
 			attrib = reader.GetAttribute ("enableWordWrapping");
@@ -282,7 +288,7 @@ public class PUTMPro : PUGameObject {
 
 			attrib = reader.GetAttribute ("minSize");
 			if (attrib != null) {
-				minSize = int.Parse (attrib);
+				minSize = int.Parse (PlanetUnityOverride.processString(_parent, attrib));
 			}
 
 			attrib = reader.GetAttribute ("alignment");
@@ -293,6 +299,16 @@ public class PUTMPro : PUGameObject {
 			attrib = reader.GetAttribute ("fontColor");
 			if (attrib != null) {
 				fontColor = fontColor.PUParse (attrib);
+			}
+
+			attrib = reader.GetAttribute ("overflowMode");
+			if (attrib != null) {
+				overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), attrib);
+			}
+
+			attrib = reader.GetAttribute ("lineSpacing");
+			if (attrib != null) {
+				lineSpacing = (int)(float.Parse (PlanetUnityOverride.processString(_parent, attrib)));
 			}
 
 			value = reader.GetAttribute ("value");
@@ -341,13 +357,14 @@ public class PUTMPro : PUGameObject {
 			textGUI.fontStyle = (FontStyles)Enum.Parse (typeof(FontStyles), fontStyle);
 		}
 		textGUI.fontSize = fontSize;
-		textGUI.OverflowMode = TextOverflowModes.Truncate;
+		textGUI.OverflowMode = overflowMode;
 		textGUI.extraPadding = true;
 
 		if (maxVisibleLines > 0) {
 			textGUI.maxVisibleLines = maxVisibleLines;
 		}
 		textGUI.enableAutoSizing = sizeToFit;
+		textGUI.lineSpacing = lineSpacing;
 		textGUI.fontSizeMin = minSize;
 		textGUI.fontSizeMax = maxSize;
 
