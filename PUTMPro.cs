@@ -381,9 +381,11 @@ public class PUTMPro : PUGameObject {
 		rt.SetParent (PlanetUnityGameObject.MainCanvas ().rectTransform, false);
 		rt.sizeDelta = new Vector2 (maxWidth, 1);
 		TextMeshProUGUI t = obj.AddComponent<TextMeshProUGUI> ();
+		t.fontSizeMin = textGUI.fontSizeMin;
+		t.fontSizeMax = textGUI.fontSizeMax;
 		t.font = textGUI.font;
 		t.enableKerning = textGUI.enableKerning;
-		t.extraPadding = textGUI.extraPadding;
+		//t.extraPadding = textGUI.extraPadding;
 		t.enableWordWrapping = textGUI.enableWordWrapping;
 		t.OverflowMode = TextOverflowModes.Overflow;
 		t.fontSize = textGUI.fontSize;
@@ -397,7 +399,8 @@ public class PUTMPro : PUGameObject {
 		t.text = text;
 
 		t.ForceMeshUpdate ();
-		Vector2 size = new Vector2(((t.preferredWidth+textGUI.fontSize) < maxWidth ? (t.preferredWidth+textGUI.fontSize) : maxWidth), t.preferredHeight);
+		Vector2 prefSize = t.GetPreferredValues ();
+		Vector2 size = new Vector2(((prefSize.x+textGUI.fontSize) < maxWidth ? (prefSize.x+textGUI.fontSize) : maxWidth), prefSize.y);
 		GameObject.Destroy (obj);
 		
 		return size;
@@ -418,7 +421,7 @@ public class PUTMPro : PUGameObject {
 		t.fontSize = fontSize;
 		t.richText = true;
 		t.ForceMeshUpdate ();
-		Vector2 size = new Vector2(t.preferredWidth, t.preferredHeight);
+		Vector2 size = t.GetPreferredValues ();
 		GameObject.Destroy (obj);
 		
 		return size;
