@@ -203,7 +203,7 @@ public class PUTMPro : PUGameObject {
 	public TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft;
 
 	public PUTMPro() {
-
+		
 	}
 
 	public void LinkClicked(string linkText, int linkID) {
@@ -342,7 +342,7 @@ public class PUTMPro : PUGameObject {
 		}
 		textGUI.fontSize = fontSize;
 		textGUI.OverflowMode = TextOverflowModes.Truncate;
-		textGUI.extraPadding = true;
+		//textGUI.extraPadding = true;
 
 		if (maxVisibleLines > 0) {
 			textGUI.maxVisibleLines = maxVisibleLines;
