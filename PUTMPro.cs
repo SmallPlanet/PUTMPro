@@ -74,6 +74,12 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 						int vertIndex = startCharInfo.vertexIndex;
 						int index_X4 = j * 4;
 
+						if (vertices != null && (vertIndex + 3 + index_X4) >= vertices.Length) {
+							break;
+						}
+						if (uiVertices != null && (vertIndex + 3 + index_X4) >= uiVertices.Length) {
+							break;
+						}
 						Vector3 a = (vertices != null ? vertices [vertIndex + 0 + index_X4] : uiVertices [vertIndex + 0 + index_X4].position);
 						Vector3 b = (vertices != null ? vertices [vertIndex + 1 + index_X4] : uiVertices [vertIndex + 1 + index_X4].position);
 						Vector3 c = (vertices != null ? vertices [vertIndex + 2 + index_X4] : uiVertices [vertIndex + 2 + index_X4].position);
