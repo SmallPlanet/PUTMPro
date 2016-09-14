@@ -39,11 +39,12 @@ public class PUTMProCircle : PUTMPro {
 
 		m_TextComponent = gameObject.GetComponent<TextMeshProUGUI>();
 
-		ScheduleForUpdate ();
+		TMPro_EventManager.TEXT_CHANGED_EVENT.Add (UpdateTextToFitCurve);
 	}
 
-	public override void Update() {
-		UpdateTextToFitCurve ();
+	public override void gaxb_unload() {
+		TMPro_EventManager.TEXT_CHANGED_EVENT.Remove (UpdateTextToFitCurve);
+		base.gaxb_unload ();
 	}
 
 	private Vector2 PositionForAngle(float r) {
@@ -58,10 +59,16 @@ public class PUTMProCircle : PUTMPro {
 
 
 	private TextMeshProUGUI m_TextComponent;
-
+	private Vector3 dirtyVertexCheck;
 		
-	public void UpdateTextToFitCurve()
+	public void UpdateTextToFitCurve(object obj)
 	{
+		if (obj.Equals (m_TextComponent) == false) {
+			return;
+		}
+
+		TMPro_EventManager.TEXT_CHANGED_EVENT.Remove (UpdateTextToFitCurve);
+
 		Vector3[] vertices;
 		Matrix4x4 matrix;
 
@@ -115,6 +122,7 @@ public class PUTMProCircle : PUTMPro {
 		// Upload the mesh with the revised information
 		m_TextComponent.UpdateVertexData();
 
+		TMPro_EventManager.TEXT_CHANGED_EVENT.Add (UpdateTextToFitCurve);
 	}
 
 }
