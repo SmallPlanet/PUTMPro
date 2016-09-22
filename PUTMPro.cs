@@ -378,7 +378,10 @@ public class PUTMPro : PUGameObject {
 	}
 
 
-
+	public void SetSizeToFit(int idealNumberfLines) {
+		textGUI.enableAutoSizing = true;
+		textGUI.fontSizeMax = (rectTransform.rect.height / idealNumberfLines) * 0.75f;
+	}
 
 	public Vector2 CalculateTextSize (string text, float maxWidth) {
 		
