@@ -148,8 +148,6 @@ public class PUTMProInputField : PUTMPro {
 			placeholderText.textGUI.lineSpacing = this.textGUI.lineSpacing;
 
 			placeholderText.gameObject.FillParentUI ();
-
-			field.placeholder = placeholderText.textGUI;
 		}
 
 		// 3) text
@@ -237,6 +235,10 @@ public class PUTMProInputField : PUTMPro {
 		}
 
 		field.text = this.value;
+
+		if (placeholder != null) {
+			field.placeholder = placeholderText.textGUI;
+		}
 	}
 
 	// only allow what FanDuel server supports
