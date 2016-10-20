@@ -11,13 +11,13 @@ public class PUTMProCircle : PUTMPro {
 
 	public float angle = 0.0f;
 
-	public override void gaxb_final(XmlReader reader, object _parent, Hashtable args) {
-		base.gaxb_final (reader, _parent, args);
+	public override void gaxb_final(TBSharpXML.TBXMLElement element, object _parent, Hashtable args) {
+		base.gaxb_final (element, _parent, args);
 
 		string attrib;
 
-		if (reader != null) {
-			attrib = reader.GetAttribute ("angle");
+		if (element != null) {
+			attrib = element.GetAttribute ("angle");
 			if (attrib != null) {
 				angle = float.Parse (attrib);
 			}

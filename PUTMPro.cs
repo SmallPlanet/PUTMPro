@@ -243,8 +243,8 @@ public class PUTMPro : PUGameObject {
 		return font;
 	}
 
-	public override void gaxb_final(XmlReader reader, object _parent, Hashtable args) {
-		base.gaxb_final(reader, _parent, args);
+	public override void gaxb_final(TBSharpXML.TBXMLElement element, object _parent, Hashtable args) {
+		base.gaxb_final(element, _parent, args);
 
 		string attrib;
 
@@ -252,68 +252,68 @@ public class PUTMPro : PUGameObject {
 			font = DefaultFont;
 		}
 
-		if(reader != null){
-			attrib = reader.GetAttribute ("font");
+		if(element != null){
+			attrib = element.GetAttribute ("font");
 			if (attrib != null) {
 				font = attrib;
 			}
 
-			attrib = reader.GetAttribute ("fontSize");
+			attrib = element.GetAttribute ("fontSize");
 			if (attrib != null) {
 				fontSize = (int)(float.Parse (PlanetUnityOverride.processString (_parent, attrib)));
 			}
 
-			attrib = reader.GetAttribute ("fontStyle");
+			attrib = element.GetAttribute ("fontStyle");
 			if (attrib != null) {
 				fontStyle = attrib;
 			}
 
-			attrib = reader.GetAttribute ("sizeToFit");
+			attrib = element.GetAttribute ("sizeToFit");
 			if (attrib != null) {
 				sizeToFit = bool.Parse (PlanetUnityOverride.processString(_parent, attrib));
 			}
 
-			attrib = reader.GetAttribute ("maxSize");
+			attrib = element.GetAttribute ("maxSize");
 			if (attrib != null) {
 				maxSize = (int)(float.Parse (PlanetUnityOverride.processString(_parent, attrib)));
 			}
 
-			attrib = reader.GetAttribute ("enableWordWrapping");
+			attrib = element.GetAttribute ("enableWordWrapping");
 			if (attrib != null) {
 				enableWordWrapping = bool.Parse (attrib);
 			}
 
-			attrib = reader.GetAttribute ("maxVisibleLines");
+			attrib = element.GetAttribute ("maxVisibleLines");
 			if (attrib != null) {
 				maxVisibleLines = int.Parse (attrib);
 			}
 
-			attrib = reader.GetAttribute ("minSize");
+			attrib = element.GetAttribute ("minSize");
 			if (attrib != null) {
 				minSize = (int)(float.Parse (PlanetUnityOverride.processString(_parent, attrib)));
 			}
 
-			attrib = reader.GetAttribute ("alignment");
+			attrib = element.GetAttribute ("alignment");
 			if (attrib != null) {
 				alignment = (TextAlignmentOptions)Enum.Parse (typeof(TextAlignmentOptions), attrib);
 			}
 
-			attrib = reader.GetAttribute ("fontColor");
+			attrib = element.GetAttribute ("fontColor");
 			if (attrib != null) {
 				fontColor = fontColor.PUParse (attrib);
 			}
 
-			attrib = reader.GetAttribute ("overflowMode");
+			attrib = element.GetAttribute ("overflowMode");
 			if (attrib != null) {
 				overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), attrib);
 			}
 
-			attrib = reader.GetAttribute ("lineSpacing");
+			attrib = element.GetAttribute ("lineSpacing");
 			if (attrib != null) {
 				lineSpacing = (int)(float.Parse (PlanetUnityOverride.processString(_parent, attrib)));
 			}
 
-			value = reader.GetAttribute ("value");
+			value = element.GetAttribute ("value");
 			value = PlanetUnityOverride.processString (_parent, value);
 		}
 	}
