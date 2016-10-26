@@ -23,7 +23,7 @@ public class PUTMProFast : PUTMPro {
 
 	}
 
-	public override void gaxb_final(TBSharpXML.TBXMLElement element, object _parent, Hashtable args) {
+	public override void gaxb_final(TB.TBXMLElement element, object _parent, Hashtable args) {
 		base.gaxb_final(element, _parent, args);
 	}
 
