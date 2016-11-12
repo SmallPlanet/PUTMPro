@@ -25,125 +25,117 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 
 	public PUTMPro entity;
 
+	private void IsCloserToPoint(Vector3 mousePoint, Vector3 testPoint, TMP_LinkInfo testLink, ref float minDistance, ref TMP_LinkInfo minLinkInfo) {
+		float testDistance = Vector3.SqrMagnitude (mousePoint - testPoint);
+		if (testDistance < minDistance) {
+			minDistance = testDistance;
+			minLinkInfo = testLink;
+		}
+	}
 
 	public bool TestForHit(Vector2 screenPoint, Camera eventCamera, Action<string, int> block) {
 
-		RectTransform rectTransform = gameObject.transform as RectTransform;
-
-		Vector2 touchPos;
-		RectTransformUtility.ScreenPointToLocalPointInRectangle (rectTransform, screenPoint, eventCamera, out touchPos);
-
-
-		string value = null;
-
-		if (entity == null) {
-			return false;
-		}
-		if(entity.text != null)
-			value = entity.text.text;
-		if(entity.textGUI != null)
-			value = entity.textGUI.text;
-
-		float minDistance = 999999;
-		int minChar = -1;
-		int linkID = 0;
-		int clickedLinkID = -1;
-
-
 		TMP_TextInfo textInfo = null;
+		TMP_Text text = null;
 
-		if(entity.text != null)
+		if (entity.text != null) {
+			text = entity.text;
 			textInfo = entity.text.textInfo;
-		if(entity.textGUI != null)
+		}
+		if (entity.textGUI != null) {
+			text = entity.textGUI;
 			textInfo = entity.textGUI.textInfo;
+		}
 
-		foreach (TMP_MeshInfo meshInfo in textInfo.meshInfo) {
-			Vector3[] vertices = meshInfo.vertices;
-			UIVertex[] uiVertices = null; //textInfo.meshInfo.uiVertices;
+		if (textInfo != null) {
 
-			if (vertices != null || uiVertices != null) {
-				for (int i = 0; i < textInfo.wordCount; i++) {
 
-					TMP_WordInfo wordInfo = textInfo.wordInfo [i];
-					int charCount = wordInfo.characterCount;
 
-					TMP_CharacterInfo startCharInfo = textInfo.characterInfo [wordInfo.firstCharacterIndex];
-					for (int j = 0; j < charCount; j++) {
-				
-						TMP_CharacterInfo charInfo = textInfo.characterInfo [wordInfo.firstCharacterIndex + j];
-						int vertIndex = startCharInfo.vertexIndex;
-						int index_X4 = j * 4;
+			// find the closest link to our touch point
+			float minDistance = 999999;
+			TMP_LinkInfo minLinkInfo = new TMP_LinkInfo ();
 
-						if (vertices != null && (vertIndex + 3 + index_X4) >= vertices.Length) {
-							break;
+			Transform rectTransform = text.transform;
+			Vector3 position = screenPoint;
+
+			// Convert position into Worldspace coordinates
+			TMP_TextUtilities.ScreenPointToWorldPointInRectangle (rectTransform, position, eventCamera, out position);
+
+			for (int i = 0; i < text.textInfo.linkCount; i++) {
+				TMP_LinkInfo linkInfo = text.textInfo.linkInfo [i];
+
+				bool isBeginRegion = false;
+
+				Vector3 bl = Vector3.zero;
+				Vector3 tl = Vector3.zero;
+				Vector3 br = Vector3.zero;
+				Vector3 tr = Vector3.zero;
+
+				// Iterate through each character of the word
+				for (int j = 0; j < linkInfo.linkTextLength; j++) {
+					int characterIndex = linkInfo.linkTextfirstCharacterIndex + j;
+					TMP_CharacterInfo currentCharInfo = text.textInfo.characterInfo [characterIndex];
+					int currentLine = currentCharInfo.lineNumber;
+
+					// Check if Link characters are on the current page
+					if (text.OverflowMode == TextOverflowModes.Page && currentCharInfo.pageNumber + 1 != text.pageToDisplay)
+						continue;
+
+					if (isBeginRegion == false) {
+						isBeginRegion = true;
+
+						bl = rectTransform.TransformPoint (new Vector3 (currentCharInfo.bottomLeft.x, currentCharInfo.descender, 0));
+						tl = rectTransform.TransformPoint (new Vector3 (currentCharInfo.bottomLeft.x, currentCharInfo.ascender, 0));
+
+						// If Word is one character
+						if (linkInfo.linkTextLength == 1) {
+							isBeginRegion = false;
+
+							br = rectTransform.TransformPoint (new Vector3 (currentCharInfo.topRight.x, currentCharInfo.descender, 0));
+							tr = rectTransform.TransformPoint (new Vector3 (currentCharInfo.topRight.x, currentCharInfo.ascender, 0));
+
+							// Check for Intersection
+							IsCloserToPoint (position, bl, linkInfo, ref minDistance, ref minLinkInfo);
+							IsCloserToPoint (position, tl, linkInfo, ref minDistance, ref minLinkInfo);
+							IsCloserToPoint (position, tr, linkInfo, ref minDistance, ref minLinkInfo);
+							IsCloserToPoint (position, br, linkInfo, ref minDistance, ref minLinkInfo);
+							IsCloserToPoint (position, (bl + br + tl + tr) * 0.25f, linkInfo, ref minDistance, ref minLinkInfo);
 						}
-						if (uiVertices != null && (vertIndex + 3 + index_X4) >= uiVertices.Length) {
-							break;
-						}
-						Vector3 a = (vertices != null ? vertices [vertIndex + 0 + index_X4] : uiVertices [vertIndex + 0 + index_X4].position);
-						Vector3 b = (vertices != null ? vertices [vertIndex + 1 + index_X4] : uiVertices [vertIndex + 1 + index_X4].position);
-						Vector3 c = (vertices != null ? vertices [vertIndex + 2 + index_X4] : uiVertices [vertIndex + 2 + index_X4].position);
-						Vector3 d = (vertices != null ? vertices [vertIndex + 3 + index_X4] : uiVertices [vertIndex + 3 + index_X4].position);
+					}
 
-						a = (a + b + c + d) / 4;
+					// Last Character of Word
+					if (isBeginRegion && j == linkInfo.linkTextLength - 1) {
+						isBeginRegion = false;
 
-						if (charInfo.character == '\x0b') {
-							linkID++;
-						}
-					
-						float distance = Vector2.Distance (touchPos, a);
-						if (distance < minDistance) {
-							minDistance = distance;
-							minChar = charInfo.index;
-						}
+						br = rectTransform.TransformPoint (new Vector3 (currentCharInfo.topRight.x, currentCharInfo.descender, 0));
+						tr = rectTransform.TransformPoint (new Vector3 (currentCharInfo.topRight.x, currentCharInfo.ascender, 0));
+
+						IsCloserToPoint (position, bl, linkInfo, ref minDistance, ref minLinkInfo);
+						IsCloserToPoint (position, tl, linkInfo, ref minDistance, ref minLinkInfo);
+						IsCloserToPoint (position, tr, linkInfo, ref minDistance, ref minLinkInfo);
+						IsCloserToPoint (position, br, linkInfo, ref minDistance, ref minLinkInfo);
+						IsCloserToPoint (position, (bl + br + tl + tr) * 0.25f, linkInfo, ref minDistance, ref minLinkInfo);
+					}
+					// If Word is split on more than one line.
+					else if (isBeginRegion && currentLine != text.textInfo.characterInfo [characterIndex + 1].lineNumber) {
+						isBeginRegion = false;
+
+						br = rectTransform.TransformPoint (new Vector3 (currentCharInfo.topRight.x, currentCharInfo.descender, 0));
+						tr = rectTransform.TransformPoint (new Vector3 (currentCharInfo.topRight.x, currentCharInfo.ascender, 0));
+
+						IsCloserToPoint (position, bl, linkInfo, ref minDistance, ref minLinkInfo);
+						IsCloserToPoint (position, tl, linkInfo, ref minDistance, ref minLinkInfo);
+						IsCloserToPoint (position, tr, linkInfo, ref minDistance, ref minLinkInfo);
+						IsCloserToPoint (position, br, linkInfo, ref minDistance, ref minLinkInfo);
+						IsCloserToPoint (position, (bl + br + tl + tr) * 0.25f, linkInfo, ref minDistance, ref minLinkInfo);
 					}
 				}
 			}
-		}
 
-		if (minChar >= 0 && minDistance < 20 && minChar < value.Length) {
-			// i is the index into the string which we clicked.  Determine a "link" by finding the previous '['
-			// and the ending ']'
-
-			// run backwards from here to find the link idex...
-			clickedLinkID = -1;
-			for (int k = minChar; k >= 0; k--) {
-				if (value [k] == '\x0b') {
-					clickedLinkID++;
-				}
-			}
-
-			if(clickedLinkID == -1){
-				return false;
-			}
-
-			int startIndex = -1;
-			int endIndex = -1;
-			for (int k = minChar; k >= 0; k--) {
-				if (value [k] == '\x0b') {
-					startIndex = k;
-					break;
-				}
-				if (value [k] == '\x0c') {
-					endIndex = -1;
-					break;
-				}
-			}
-			for (int k = minChar; k < value.Length; k++) {
-				if (value [k] == '\x0c') {
-					endIndex = k;
-					break;
-				}
-				if (value [k] == '\x0b') {
-					endIndex = -1;
-					break;
-				}
-			}
-				
-			if (startIndex >= 0 && endIndex >= 0) {
+			int linkIdx = Array.IndexOf (text.textInfo.linkInfo, minLinkInfo);
+			if (linkIdx >= 0) {
 				if (block != null) {
-					string linkText = value.Substring (startIndex + 1, endIndex - startIndex - 1).Trim ();
-					block (linkText, clickedLinkID);
+					block (minLinkInfo.GetLinkText (), linkIdx);
 				}
 				return true;
 			}
