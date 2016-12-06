@@ -219,7 +219,7 @@ public class PUTMPro : PUGameObject {
 			PUText.GlobalOnLinkClickAction (linkText, linkID, this);
 		}
 		if (onLinkClick != null) {
-			NotificationCenter.postNotification (Scope (), onLinkClick, NotificationCenter.Args ("link", linkText));
+			NotificationCenter.postNotification (Scope (), onLinkClick, NotificationCenter.Args ("link", linkText, "linkID", linkID));
 		}
 	}
 
@@ -248,6 +248,11 @@ public class PUTMPro : PUGameObject {
 			attrib = element.GetAttribute ("font");
 			if (attrib != null) {
 				font = attrib;
+			}
+
+			attrib = element.GetAttribute ("onLinkClick");
+			if (attrib != null) {
+				onLinkClick = PlanetUnityOverride.processString (_parent, attrib);
 			}
 
 			attrib = element.GetAttribute ("fontSize");
