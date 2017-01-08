@@ -32,8 +32,6 @@ public partial class PUTMProButton : PUTMPro {
 
 	// This is required for application-level subclasses
 	public override void gaxb_init () { 
-		title = "<TMProButton/>";
-
 		base.gaxb_init ();
 		gaxb_addToParent();
 	}
