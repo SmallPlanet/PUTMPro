@@ -138,7 +138,7 @@ public class PUTMProInputField : PUTMPro {
 			placeholderText.value = this.placeholder;
 			placeholderText.LoadIntoPUGameObject (textArea);
 
-			placeholderText.textGUI.OverflowMode = this.textGUI.OverflowMode;
+			placeholderText.textGUI.overflowMode = this.textGUI.overflowMode;
 
 			placeholderText.textGUI.alignment = this.textGUI.alignment;
 			placeholderText.textGUI.font = this.textGUI.font;

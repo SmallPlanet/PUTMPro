@@ -46,7 +46,7 @@ public class PUTMProFast : PUTMPro {
 		text.isOverlay = true;
 		text.isOrthographic = true;
 		text.fontSize = fontSize;
-		text.OverflowMode = TextOverflowModes.Ellipsis;
+		text.overflowMode = TextOverflowModes.Ellipsis;
 		text.extraPadding = true;
 
 		if (maxVisibleLines > 0) {

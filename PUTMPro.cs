@@ -78,7 +78,7 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 					int currentLine = currentCharInfo.lineNumber;
 
 					// Check if Link characters are on the current page
-					if (text.OverflowMode == TextOverflowModes.Page && currentCharInfo.pageNumber + 1 != text.pageToDisplay)
+					if (text.overflowMode == TextOverflowModes.Page && currentCharInfo.pageNumber + 1 != text.pageToDisplay)
 						continue;
 
 					if (isBeginRegion == false) {
@@ -351,7 +351,7 @@ public class PUTMPro : PUGameObject {
 			textGUI.fontStyle = (FontStyles)Enum.Parse (typeof(FontStyles), fontStyle);
 		}
 		textGUI.fontSize = fontSize;
-		textGUI.OverflowMode = overflowMode;
+		textGUI.overflowMode = overflowMode;
 		//textGUI.extraPadding = true;
 
 		if (maxVisibleLines > 0) {
@@ -388,7 +388,7 @@ public class PUTMPro : PUGameObject {
 		t.enableKerning = textGUI.enableKerning;
 		//t.extraPadding = textGUI.extraPadding;
 		t.enableWordWrapping = textGUI.enableWordWrapping;
-		t.OverflowMode = TextOverflowModes.Overflow;
+		t.overflowMode = TextOverflowModes.Overflow;
 		t.fontSize = textGUI.fontSize;
 		t.richText = textGUI.richText;
 		t.fontStyle = textGUI.fontStyle;
@@ -400,7 +400,8 @@ public class PUTMPro : PUGameObject {
 		t.text = text;
 
 		t.ForceMeshUpdate ();
-		Vector2 prefSize = t.GetPreferredValues ();
+		Vector2 prefSize = new Vector2 (t.preferredWidth, t.preferredHeight);
+		Debug.LogFormat ("{0} : {1}", prefSize, text);
 		Vector2 size = new Vector2(((prefSize.x+textGUI.fontSize) < maxWidth ? (prefSize.x+textGUI.fontSize) : maxWidth), prefSize.y);
 		GameObject.Destroy (obj);
 		
@@ -417,12 +418,12 @@ public class PUTMPro : PUGameObject {
 		TextMeshProUGUI t = obj.AddComponent<TextMeshProUGUI> ();
 		t.font = GetFont(font);
 		t.enableWordWrapping = enableWordWrapping;
-		t.OverflowMode = TextOverflowModes.Overflow;
+		t.overflowMode = TextOverflowModes.Overflow;
 		t.text = text;
 		t.fontSize = fontSize;
 		t.richText = true;
 		t.ForceMeshUpdate ();
-		Vector2 size = t.GetPreferredValues ();
+		Vector2 size = new Vector2 (t.preferredWidth, t.preferredHeight);
 		GameObject.Destroy (obj);
 		
 		return size;
