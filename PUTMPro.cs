@@ -236,8 +236,6 @@ public class PUTMPro : PUGameObject {
 	}
 
 	public override void gaxb_final(TB.TBXMLElement element, object _parent, Hashtable args) {
-		base.gaxb_final(element, _parent, args);
-
 		string attrib;
 
 		if (font == null) {
@@ -313,6 +311,8 @@ public class PUTMPro : PUGameObject {
 			value = element.GetAttribute ("value");
 			value = PlanetUnityOverride.processString (_parent, value);
 		}
+
+		base.gaxb_final(element, _parent, args);
 	}
 
 	public override void gaxb_complete()
@@ -381,57 +381,6 @@ public class PUTMPro : PUGameObject {
 	}
 
 	public Vector2 CalculateTextSize (string text, float maxWidth) {
-		
-		GameObject obj = new GameObject ();
-		RectTransform rt = obj.AddComponent<RectTransform> ();
-		rt.SetParent (PlanetUnityGameObject.MainCanvas ().rectTransform, false);
-		rt.sizeDelta = new Vector2 (maxWidth, 1);
-		TextMeshProUGUI t = obj.AddComponent<TextMeshProUGUI> ();
-		t.fontSizeMin = textGUI.fontSizeMin;
-		t.fontSizeMax = textGUI.fontSizeMax;
-		t.font = textGUI.font;
-		t.enableKerning = textGUI.enableKerning;
-		//t.extraPadding = textGUI.extraPadding;
-		t.enableWordWrapping = textGUI.enableWordWrapping;
-		t.overflowMode = TextOverflowModes.Overflow;
-		t.fontSize = textGUI.fontSize;
-		t.richText = textGUI.richText;
-		t.fontStyle = textGUI.fontStyle;
-		t.alignment = textGUI.alignment;
-		t.outlineWidth = textGUI.outlineWidth;
-		t.characterSpacing = textGUI.characterSpacing;
-		t.lineSpacing = textGUI.lineSpacing;
-		t.paragraphSpacing = textGUI.paragraphSpacing;
-		t.text = text;
-
-		t.ForceMeshUpdate ();
-		Vector2 prefSize = new Vector2 (t.preferredWidth, t.preferredHeight);
-		Debug.LogFormat ("{0} : {1}", prefSize, text);
-		Vector2 size = new Vector2(((prefSize.x+textGUI.fontSize) < maxWidth ? (prefSize.x+textGUI.fontSize) : maxWidth), prefSize.y);
-		GameObject.Destroy (obj);
-		
-		return size;
-		
-	}
-	
-	public Vector2 CalculateTextSize (string text, float maxWidth, string font, float fontSize, bool enableWordWrapping) {
-		
-		GameObject obj = new GameObject ();
-		RectTransform rt = obj.AddComponent<RectTransform> ();
-		rt.SetParent (PlanetUnityGameObject.MainCanvas ().rectTransform, false);
-		rt.sizeDelta = new Vector2 (maxWidth, 1);
-		TextMeshProUGUI t = obj.AddComponent<TextMeshProUGUI> ();
-		t.font = GetFont(font);
-		t.enableWordWrapping = enableWordWrapping;
-		t.overflowMode = TextOverflowModes.Overflow;
-		t.text = text;
-		t.fontSize = fontSize;
-		t.richText = true;
-		t.ForceMeshUpdate ();
-		Vector2 size = new Vector2 (t.preferredWidth, t.preferredHeight);
-		GameObject.Destroy (obj);
-		
-		return size;
-		
+		return textGUI.GetPreferredValues (maxWidth, float.MaxValue);
 	}
 }
