@@ -381,6 +381,6 @@ public class PUTMPro : PUGameObject {
 	}
 
 	public Vector2 CalculateTextSize (string text, float maxWidth) {
-		return textGUI.GetPreferredValues (maxWidth, float.MaxValue);
+		return textGUI.GetPreferredValues (text, maxWidth, 0);
 	}
 }
