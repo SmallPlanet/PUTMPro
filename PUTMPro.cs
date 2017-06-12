@@ -372,6 +372,8 @@ public class PUTMPro : PUGameObject {
 
 		textGUI.color = fontColor;
 		textGUI.text = PlanetUnityStyle.ReplaceStyleTags(value);
+
+		UpdateRectTransform ();
 	}
 
 
