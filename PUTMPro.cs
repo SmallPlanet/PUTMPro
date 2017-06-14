@@ -383,6 +383,18 @@ public class PUTMPro : PUGameObject {
 	}
 
 	public Vector2 CalculateTextSize (string text, float maxWidth) {
-		return textGUI.GetPreferredValues (text, maxWidth, 0);
+
+		bool savedAutoSizing = textGUI.enableAutoSizing;
+		textGUI.enableAutoSizing = false;
+
+		Vector2 prefSize = textGUI.GetPreferredValues(text, maxWidth, Mathf.Infinity);
+		if (prefSize.x > maxWidth) {
+			prefSize.x = maxWidth;
+		}
+
+		textGUI.enableAutoSizing = savedAutoSizing;
+
+		return prefSize;
 	}
+
 }
