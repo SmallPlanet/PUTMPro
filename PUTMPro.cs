@@ -319,6 +319,7 @@ public class PUTMPro : PUGameObject {
 	{
 		base.gaxb_complete ();
 
+		ScheduleForOnEnable ();
 
 		GenerateTextComponent ();
 
@@ -347,8 +348,30 @@ public class PUTMPro : PUGameObject {
 		gaxb_addToParent();
 	}
 
+	public override void OnEnable ()
+	{
+		FixErrorWithAttributes ();
+	}
+
+	public override void OnDisable ()
+	{
+		FixErrorWithAttributes ();
+	}
+
+	private void FixErrorWithAttributes() {
+		// Note: Some attributes do not seem to work properly if the text view is immediately disabled.
+		// For those attributes, we reset them on enable to ensure they are updated properly
+		PlanetUnityGameObject.ScheduleTask (() => {
+			textGUI.alignment = alignment;
+		});
+	}
+
 	public virtual void GenerateTextComponent() {
-		textGUI = gameObject.AddComponent<TextMeshProUGUI> ();
+
+		textGUI = gameObject.GetComponent<TextMeshProUGUI> ();
+		if (textGUI == null) {
+			textGUI = gameObject.AddComponent<TextMeshProUGUI> ();
+		}
 		textGUI.font = GetFont(font);
 		textGUI.enableWordWrapping = enableWordWrapping;
 		textGUI.richText = true;
@@ -357,7 +380,6 @@ public class PUTMPro : PUGameObject {
 		}
 		textGUI.fontSize = fontSize;
 		textGUI.overflowMode = overflowMode;
-		//textGUI.extraPadding = true;
 
 		if (maxVisibleLines > 0) {
 			textGUI.maxVisibleLines = maxVisibleLines;
