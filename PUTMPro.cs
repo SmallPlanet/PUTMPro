@@ -37,14 +37,17 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 
 		TMP_TextInfo textInfo = null;
 		TMP_Text text = null;
+		float fontSize = 0;
 
 		if (entity.text != null) {
 			text = entity.text;
 			textInfo = entity.text.textInfo;
+			fontSize = entity.text.fontSize;
 		}
 		if (entity.textGUI != null) {
 			text = entity.textGUI;
 			textInfo = entity.textGUI.textInfo;
+			fontSize = entity.textGUI.fontSize;
 		}
 
 		if (textInfo != null) {
@@ -60,6 +63,8 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 
 			// Convert position into Worldspace coordinates
 			TMP_TextUtilities.ScreenPointToWorldPointInRectangle (rectTransform, position, eventCamera, out position);
+
+			minDistance = fontSize;
 
 			for (int i = 0; i < text.textInfo.linkCount; i++) {
 				TMP_LinkInfo linkInfo = text.textInfo.linkInfo [i];
@@ -132,12 +137,18 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 				}
 			}
 
-			int linkIdx = Array.IndexOf (text.textInfo.linkInfo, minLinkInfo);
-			if (linkIdx >= 0) {
-				if (block != null) {
-					block (minLinkInfo.GetLinkText (), linkIdx);
+			if (minLinkInfo.GetLinkText() != null)
+			{
+				int linkIdx = Array.IndexOf(text.textInfo.linkInfo, minLinkInfo);
+				if (linkIdx >= 0)
+				{
+					if (block != null)
+					{
+						block(minLinkInfo.GetLinkText(), linkIdx);
+					}
+
+					return true;
 				}
-				return true;
 			}
 		}
 
