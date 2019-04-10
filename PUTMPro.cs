@@ -64,7 +64,9 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 			// Convert position into Worldspace coordinates
 			TMP_TextUtilities.ScreenPointToWorldPointInRectangle (rectTransform, position, eventCamera, out position);
 
-			minDistance = fontSize;
+			// Find the distance by font size after its transformed
+			Vector3 minFontDistance = rectTransform.TransformPoint(Vector3.zero) - rectTransform.TransformPoint(new Vector3(fontSize  * 2.0f, 0.0f, 0.0f));
+			minDistance = minFontDistance.sqrMagnitude;
 
 			for (int i = 0; i < text.textInfo.linkCount; i++) {
 				TMP_LinkInfo linkInfo = text.textInfo.linkInfo [i];
@@ -76,6 +78,19 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 				Vector3 br = Vector3.zero;
 				Vector3 tr = Vector3.zero;
 
+				// center of every character in every word
+				for (int j = 0; j < linkInfo.linkTextLength; j++)
+				{
+					int characterIndex = linkInfo.linkTextfirstCharacterIndex + j;
+					TMP_CharacterInfo currentCharInfo = text.textInfo.characterInfo[characterIndex];
+					
+					Vector3 cp = (currentCharInfo.topRight + currentCharInfo.bottomLeft) * 0.5f;					
+					cp = rectTransform.TransformPoint (cp);
+					IsCloserToPoint (position, cp, linkInfo, ref minDistance, ref minLinkInfo);
+					
+				}
+
+				/*
 				// Iterate through each character of the word
 				for (int j = 0; j < linkInfo.linkTextLength; j++) {
 					int characterIndex = linkInfo.linkTextfirstCharacterIndex + j;
@@ -135,6 +150,7 @@ public class DetectTextClickTMPro : MonoBehaviour, IPointerClickHandler, IPointe
 						IsCloserToPoint (position, (bl + br + tl + tr) * 0.25f, linkInfo, ref minDistance, ref minLinkInfo);
 					}
 				}
+				*/
 			}
 
 			if (minLinkInfo.GetLinkText() != null)
